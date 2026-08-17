@@ -1,14 +1,21 @@
 name: Android Build
 
 on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
-  prepare-wrapper:
+  build:
+    name: Build Android APK
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 17
@@ -17,18 +24,21 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Install Gradle
+      - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
       - name: Generate Gradle Wrapper
         run: gradle wrapper --gradle-version 8.10
 
-      - name: Upload Gradle Wrapper
+      - name: Make Gradle Wrapper executable
+        run: chmod +x gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: gradle-wrapper
-          path: |
-            gradlew
-            gradlew.bat
-            gradle/wrapper/gradle-wrapper.jar
-            gradle/wrapper/gradle-wrapper.properties
+          name: FamilyRemoteSupport-debug
+          path: App/build/outputs/apk/debug/*.apk
