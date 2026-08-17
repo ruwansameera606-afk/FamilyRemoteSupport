@@ -3,7 +3,7 @@
 
     <application
         android:allowBackup="true"
-        android:label="Family Remote Support"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.FamilyRemoteSupport">
 
@@ -17,6 +17,10 @@
             </intent-filter>
 
         </activity>
+
+        <service
+            android:name=".SupportSessionService"
+            android:exported="false" />
 
     </application>
 
