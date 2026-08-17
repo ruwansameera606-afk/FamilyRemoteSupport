@@ -24,17 +24,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Set up Gradle
+      - name: Set up Gradle 8.10
         uses: gradle/actions/setup-gradle@v4
-
-      - name: Generate Gradle Wrapper
-        run: gradle wrapper --gradle-version 8.10
-
-      - name: Make Gradle Wrapper executable
-        run: chmod +x gradlew
+        with:
+          gradle-version: '8.10'
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: gradle assembleDebug
 
       - name: Upload APK
         if: success()
